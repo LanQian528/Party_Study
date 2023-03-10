@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjy.party.dao.OrganizationerMapper">
+    <resultMap type="com.cjy.party.domain.User" id="ormemInfo">
+        <id property="id" column="name"/>
+        <result property="type" column="type"/>
+        <result property="name" column="username"/>
+    </resultMap>
+    <resultMap id="getAllOrganizationerMapper" type="com.cjy.party.domain.Organizationer">
+        <id property="ormem_acc" column="ormem_acc"/>
+        <result property="ormem_pass" column="ormem_pass"/>
+        <result property="ormem_name" column="ormem_name"/>
+        <association property="school" column="school"
+                     select="com.cjy.party.dao.SchoolMapper.getNameById"/>
+    </resultMap>
+
+    <select id="verifyAccount" resultMap="ormemInfo">
+        select username, name, type
+        from login
+        where username = #{account}
+          and password = #{password};
+    </select>
+    <select id="getNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select ormem_name
+        from organizationer
+        where ormem_id = #{id};
+    </select>
+    <select id="getAllOrganizationer" resultMap="getAllOrganizationerMapper">
+        select *
+        from organizationer;
+    </select>
+    <update id="updateInfo" parameterType="com.cjy.party.domain.Organizationer">
+        update organizationer
+        set ormem_pass=#{ormem_pass},
+            ormem_name=#{ormem_name},
+            school=#{school}
+        where ormem_acc = #{ormem_acc};
+    </update>
+    <delete id="deleteTeacher" parameterType="java.lang.String">
+        delete
+        from organizationer
+        where ormem_acc = #{account};
+    </delete>
+    <insert id="insertTeacher" parameterType="com.cjy.party.domain.Organizationer">
+        insert into organizationer(ormem_acc, ormem_pass, ormem_name, school)
+        values (#{ormem_acc}, #{ormem_pass}, #{ormem_name}, #{school});
+    </insert>
+    <select id="getOrganizationInfoById" parameterType="java.lang.Integer" resultMap="getAllOrganizationerMapper">
+        select *
+        from organizationer
+        where ormem_id = #{id};
+    </select>
+</mapper>

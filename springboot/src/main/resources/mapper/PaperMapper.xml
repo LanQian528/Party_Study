@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjy.party.dao.PaperMapper">
+
+    <resultMap id="getPaperByCreatorIdMap" type="com.cjy.party.domain.Paper">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="createTime" column="createTime"/>
+        <result property="creator" column="creator"/>
+        <association property="one" column="one"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="two" column="two"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="three" column="three"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="four" column="four"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="five" column="five"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="six" column="six"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="seven" column="seven"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="eight" column="eight"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="nine" column="nine"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="ten" column="ten"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="eleven" column="eleven"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="twelve" column="twelve"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="thirteen" column="thirteen"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="fourteen" column="fourteen"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="fifteen" column="fifteen"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="sixteen" column="sixteen"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="seventeen" column="seventeen"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="eighteen" column="eighteen"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="nineteen" column="nineteen"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="twenty" column="twenty"
+                     select="com.cjy.party.dao.ObjectProblemMapper.getObjectInfoById"/>
+        <association property="twentyone" column="twentyone"
+                     select="com.cjy.party.dao.SubjectProblemMapper.getSubProblemById"/>
+        <association property="twentytwo" column="twentytwo"
+                     select="com.cjy.party.dao.SubjectProblemMapper.getSubProblemById"/>
+        <association property="twentythree" column="twentythree"
+                     select="com.cjy.party.dao.SubjectProblemMapper.getSubProblemById"/>
+        <association property="twentyfour" column="twentyfour"
+                     select="com.cjy.party.dao.SubjectProblemMapper.getSubProblemById"/>
+        <association property="twentyfive" column="twentyfive"
+                     select="com.cjy.party.dao.SubjectProblemMapper.getSubProblemById"/>
+    </resultMap>
+    <select id="getPaperByCreatorId" resultMap="getPaperByCreatorIdMap">
+        select *
+        from paper
+        where creator = #{id};
+    </select>
+    <select id="getPaperInfoById" resultMap="getPaperByCreatorIdMap" parameterType="java.lang.Integer">
+        select *
+        from paper
+        where id = #{id};
+    </select>
+    <insert id="insertPaper">
+        insert into paper(name, creator, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve,
+                          thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twentyone,
+                          twentytwo, twentythree, twentyfour, twentyfive)
+        values (#{name}, #{creator}, #{yi}, #{er}, #{san}, #{si}, #{wu}, #{liu}, #{qi}, #{ba}, #{jiu}, #{shi}, #{shiyi},
+                #{shier}, #{shisan}, #{shisi}, #{shiwu}, #{shiliu}, #{shiqi}, #{shiba}, #{shijiu}, #{ershi}, #{eryi},
+                #{erer}, #{ersan}, #{ersi}, #{erwu});
+    </insert>
+    <delete id="deletePaperById" parameterType="java.lang.Integer" >
+        delete from paper where id =#{id}
+    </delete>
+</mapper>

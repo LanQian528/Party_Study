@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "spring.server.MaxFileSize",
+      "type": "java.lang.String",
+      "description": "Description for spring.server.MaxFileSize."
+    }
+  ]
+}

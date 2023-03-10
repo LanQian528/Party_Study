@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjy.party.dao.StudentMapper">
+    <resultMap type="com.cjy.party.domain.User" id="userInfo">
+        <id property="id" column="username"/>
+        <result property="type" column="type"/>
+        <result property="name" column="name"/>
+    </resultMap>
+    <resultMap id="getStuByStuIDMapper" type="com.cjy.party.domain.Student">
+        <id property="stu_id" column="stu_id"/>
+        <result property="stu_grade" column="stu_grade"/>
+        <result property="stu_pass" column="stu_pass"/>
+        <result property="stu_name" column="stu_name"/>
+        <result property="major" column="major"/>
+        <association property="stu_orgamem" column="stu_orgamem"
+                     select="com.cjy.party.dao.OrganizationerMapper.getNameById"/>
+        <association property="stu_school" column="stu_school"
+                     select="com.cjy.party.dao.SchoolMapper.getNameById"/>
+        <collection property="grades" column="stu_id"
+                    select="com.cjy.party.dao.GradeMapper.getAllGrade"/>
+    </resultMap>
+
+    <select id="verifyAccount" resultMap="userInfo">
+        select username, name, type
+        from login
+        where username = #{stu_id}
+          and password = #{stu_pass};
+    </select>
+    <select id="getStuByStuID" parameterType="java.lang.String" resultMap="getStuByStuIDMapper">
+        select *
+        from student
+        where stu_id = #{id};
+    </select>
+    <select id="getAllStudentInfo" resultMap="getStuByStuIDMapper">
+        select *
+        from student;
+    </select>
+    <delete id="deleteStudent" parameterType="java.lang.String">
+        delete
+        from student
+        where stu_id = #{id};
+    </delete>
+
+    <update id="updateStudentById" parameterType="com.cjy.party.domain.Student">
+        update student
+        set stu_name=#{stu_name},
+            stu_pass=#{stu_pass},
+            stu_grade=#{stu_grade},
+            stu_school=#{stu_school},
+            stu_orgamem=#{stu_orgamem},
+            major=#{major}
+        where stu_id = #{stu_id};
+    </update>
+    <insert id="insertStudent" parameterType="com.cjy.party.domain.Student">
+        insert into student(stu_id, stu_pass, stu_name, stu_grade, stu_school, stu_orgamem, major)
+        values (#{stu_id}, #{stu_pass},
+                #{stu_name}, #{stu_grade},
+                #{stu_school}, #{stu_orgamem}, #{major});
+    </insert>
+    <resultMap id="getMeigeSchoolRenshuMapper" type="com.cjy.party.domain.ResultData">
+        <id property="type" column="type"/>
+        <result property="data" column="data"/>
+    </resultMap>
+    <select id="getMeigeSchoolRenshu" resultMap="getMeigeSchoolRenshuMapper">
+        select stu_school as type, COUNT(stu_id) as data
+        from student
+        group by stu_school;
+    </select>
+    <select id="getKaoheRenshu" resultMap="getMeigeSchoolRenshuMapper">
+        select stu_school as type, COUNT(*) as data
+        from student,studentgrade
+        where student.stu_id = studentgrade.stu_id
+        group by stu_school;
+    </select>
+    <select id="getStuByTeacherId" resultMap="getStuByStuIDMapper">
+        select *
+        from student
+        where stu_orgamem = #{id};
+    </select>
+
+    <select id="getTeaByStu" resultType="java.lang.Integer">
+        select stu_orgamem
+        from student
+        where stu_id = #{id};
+    </select>
+
+    <insert id="sendPaperToStudent">
+        insert into stupaper(stu, paper)
+        values (#{stuId}, #{paperId});
+    </insert>
+
+    <resultMap id="getMyPaperMap" type="com.cjy.party.domain.StuPaper">
+        <id property="id" column="id"/>
+        <association property="paper" column="paper" select="com.cjy.party.dao.PaperMapper.getPaperInfoById"/>
+        <association property="stu" column="stu" select="com.cjy.party.dao.StudentMapper.getStuByStuID"/>
+    </resultMap>
+    <select id="getMyPaper" resultMap="getMyPaperMap">
+        select id,paper,stu
+        from stupaper
+        where stu = #{id};
+    </select>
+</mapper>
